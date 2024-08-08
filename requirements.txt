@@ -9,6 +9,7 @@ tqdm
 typer
 # analysis
 sentence_transformers
+datasets
 pandas
 numpy
 # -e .
