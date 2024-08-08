@@ -1,0 +1,14 @@
+# project utilities
+black
+flake8
+isort
+loguru
+pip
+python-dotenv
+tqdm
+typer
+# analysis
+sentence_transformers
+pandas
+numpy
+# -e .
