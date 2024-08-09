@@ -58,7 +58,8 @@ create_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) memo_canonical_novels/dataset.py
+	$(PYTHON_INTERPRETER) src/embeddings.py
+	$(PYTHON_INTERPRETER) src/pooling.py
 
 
 #################################################################################

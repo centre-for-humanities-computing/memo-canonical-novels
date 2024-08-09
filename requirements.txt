@@ -8,8 +8,10 @@ python-dotenv
 tqdm
 typer
 # analysis
+openpyxl
 sentence_transformers
 datasets
 pandas
 numpy
+git+https://github.com/centre-for-humanities-computing/infodynamics.git
 # -e .
