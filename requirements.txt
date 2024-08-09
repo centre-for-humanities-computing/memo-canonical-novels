@@ -13,5 +13,6 @@ sentence_transformers
 datasets
 pandas
 numpy
+tslearn
 git+https://github.com/centre-for-humanities-computing/infodynamics.git
 # -e .
