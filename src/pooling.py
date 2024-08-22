@@ -25,9 +25,12 @@ def mean_pooling(dataset: Dataset):
 
 @app.command()
 def main(
-    input_path: Path = INTERIM_DATA_DIR / "MeMo_embedding_chunks",
-    output_path: Path = PROCESSED_DATA_DIR / "MeMo_embeddings_pooled",
+    input_ds: str
 ):
+
+    input_path: Path = INTERIM_DATA_DIR / input_ds
+    output_ds = input_ds.replace("emb__", "meanpool__")
+    output_path: Path = PROCESSED_DATA_DIR / output_ds
 
     ds_chunks = Dataset.load_from_disk(input_path)
     n_chunks = [len(chunks) for chunks in ds_chunks["chunk"]]

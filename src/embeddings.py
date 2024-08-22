@@ -14,7 +14,7 @@ logger.add("embeddings.log", format="{time} {message}")
 
 
 # parameters
-MODEL_NAME = "MiMe-MeMo/MeMo-BERT-03"
+MODEL_NAME = "KennethEnevoldsen/dfm-sentence-encoder-large-exp2-no-lang-align"
 MAX_TOKENS = 512
 model = SentenceTransformer(MODEL_NAME)
 
@@ -104,8 +104,11 @@ def split_long_sentence(sentence, max_tokens=MAX_TOKENS):
 @app.command()
 def main(
     input_path: Path = RAW_DATA_DIR / "Danish 19c novels KU-corpus",
-    output_path: Path = INTERIM_DATA_DIR / "MeMo_embedding_chunks",
 ):
+
+    # output path
+    mname = MODEL_NAME.replace("/", "__")
+    output_path = INTERIM_DATA_DIR / f"emb__{mname}"
 
     # input & inference
     files = [item for item in input_path.iterdir()]
