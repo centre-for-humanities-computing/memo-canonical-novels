@@ -1,4 +1,5 @@
 import re
+import hashlib
 from pathlib import Path
 
 import typer
@@ -13,13 +14,11 @@ app = typer.Typer()
 logger.add("embeddings.log", format="{time} {message}")
 
 
-# parameters
-MODEL_NAME = "intfloat/multilingual-e5-large"
-MAX_TOKENS = 512
-model = SentenceTransformer(MODEL_NAME)
+def hash_prompt(prompt: str) -> str:
+    return hashlib.sha256(prompt.encode()).hexdigest()[:8]
 
 
-def clean_whitespace(text):
+def clean_whitespace(text: str) -> str:
     # rm newline characters
     text = text.replace('\n', ' ')
     # multiple spaces -> single space
@@ -34,7 +33,7 @@ def clean_whitespace(text):
     return text
 
 
-def simple_sentencize(text):
+def simple_sentencize(text: str) -> list:
     """Split sentences on punctuation (and keep it)
     """
     sentences = re.findall(r'[^.!?]*[.!?]', text)
@@ -42,7 +41,7 @@ def simple_sentencize(text):
     return sentences
 
 
-def chunk_sentences(sentences, max_tokens=MAX_TOKENS):
+def chunk_sentences(sentences: list, max_tokens: int, model: SentenceTransformer) -> list:
     """Chunk sentences into as large as possible groups, while total length is bellow `max_tokens`.
     """
     output = []
@@ -56,7 +55,7 @@ def chunk_sentences(sentences, max_tokens=MAX_TOKENS):
         if chunk_len + seq_len > max_tokens:
             # edge case: sequence exceeds max_tokens & current chunk is empty
             if len(current_chunk) == 0: 
-                parts = split_long_sentence(sentence, max_tokens)
+                parts = split_long_sentence(sentence, max_tokens=max_tokens, model=model)
                 output.extend(parts)
             # else, append sentences from last iterations and start a new chunk 
             # for current text
@@ -75,7 +74,7 @@ def chunk_sentences(sentences, max_tokens=MAX_TOKENS):
     return output
 
 
-def split_long_sentence(sentence, max_tokens=MAX_TOKENS):
+def split_long_sentence(sentence: str, max_tokens: int, model: SentenceTransformer) -> list:
     """Tokenize word for word in case a single sentence is above context length.
     """
     words = sentence.split()
@@ -103,13 +102,27 @@ def split_long_sentence(sentence, max_tokens=MAX_TOKENS):
 
 @app.command()
 def main(
-    input_path: Path = RAW_DATA_DIR / "Danish 19c novels KU-corpus",
-    prefix: str = None
+    input_path: Path = typer.Option(RAW_DATA_DIR / "Danish 19c novels KU-corpus", help="Directory of txt files"),
+    model_name: str = typer.Option("MiMe-MeMo/MeMo-BERT-03", help="Name of a SentenceTransformer to use for inference"),
+    max_tokens: int = typer.Option(512, help="Maximum number of tokens per chunk"),
+    prefix: str = typer.Option(None, help="Prefix/instruction to add to each chunk before encoding"),
+    prefix_description = typer.Option(None, help="Short description of the prefix to add to the filename"),
+    output_dir: Path = typer.Option(INTERIM_DATA_DIR, help="Root dir where the processed dataset dir is getting saved"),
 ):
 
+    model = SentenceTransformer(model_name)
+
     # output path
-    mname = MODEL_NAME.replace("/", "__")
-    output_path = INTERIM_DATA_DIR / f"emb__{mname}"
+    mname = model_name.replace("/", "__")
+    if prefix:
+        if prefix_description:
+            output_path = INTERIM_DATA_DIR / f"emb__{mname}_{prefix_description}"
+        if not prefix_description:
+            prefix_hash = hash_prompt(prefix)
+            output_path = INTERIM_DATA_DIR / f"emb__{mname}_{prefix_hash}"
+            logger.info(f"Hashing prefix: {prefix} == {prefix_hash}")
+    else:
+        output_path = INTERIM_DATA_DIR / f"emb__{mname}"
 
     # input & inference
     files = [item for item in input_path.iterdir()]
@@ -125,7 +138,7 @@ def main(
         try:
             novel_cl = clean_whitespace(novel)
             novel_sents = simple_sentencize(novel_cl)
-            chunks = chunk_sentences(novel_sents)
+            chunks = chunk_sentences(novel_sents, max_tokens=max_tokens, model=model)
         except Exception as e:
             logger.error(f"Prep {path}: {e}")
 
