@@ -14,7 +14,7 @@ logger.add("embeddings.log", format="{time} {message}")
 
 
 # parameters
-MODEL_NAME = "KennethEnevoldsen/dfm-sentence-encoder-large-exp2-no-lang-align"
+MODEL_NAME = "intfloat/multilingual-e5-large"
 MAX_TOKENS = 512
 model = SentenceTransformer(MODEL_NAME)
 
@@ -104,6 +104,7 @@ def split_long_sentence(sentence, max_tokens=MAX_TOKENS):
 @app.command()
 def main(
     input_path: Path = RAW_DATA_DIR / "Danish 19c novels KU-corpus",
+    prefix: str = None
 ):
 
     # output path
@@ -132,6 +133,8 @@ def main(
         try:
             embs = []
             for chunk in chunks:
+                if prefix:
+                    chunk = prefix + chunk
                 emb = model.encode(chunk)
                 embs.append(emb)
         except Exception as e:
