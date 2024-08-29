@@ -25,7 +25,7 @@ def mean_pooling(dataset: Dataset):
 
 @app.command()
 def main(
-    input_ds: str
+    input_ds: str = typer.Argument(help="name of dataset in INTERIM_DATA_DIR to process")
 ):
 
     input_path: Path = INTERIM_DATA_DIR / input_ds
