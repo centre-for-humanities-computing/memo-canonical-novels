@@ -109,7 +109,7 @@ def plot_dendrogram(df, col_to_color, col_to_label, l, h, palette='Set2'):
     legend_handles = [Patch(facecolor=color, label=label) for label, color in used_colors.items()]
     ax.legend(handles=legend_handles, loc='upper right')
 
-    plt.title(f'Canon/Historical tags in {len(df)} novels')
+    #plt.title(f'Canon/Historical tags in {len(df)} novels')
     plt.show()
 
 
@@ -210,7 +210,7 @@ def plot_dendrogram_different_embeddings(df, cosine_matrix, col_to_color, col_to
     legend_handles = [Patch(facecolor=color, label=label) for label, color in used_colors.items()]
     ax.legend(handles=legend_handles, loc='upper right')
 
-    plt.title(f'Canon/Historical tags in {len(df)} novels, label: {method_name}')
+    #plt.title(f'Canon/Historical tags in {len(df)} novels, label: {method_name}')
     plt.show()
 
 
