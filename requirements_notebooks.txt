@@ -1,0 +1,15 @@
+datasets
+pandas
+numpy
+scipy
+sklearn
+matplotlib
+plotly
+seaborn
+venny4py
+matplotlib_venn
+neurokit2
+nltk
+textdescriptives
+spacy
+tslearn
