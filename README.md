@@ -4,8 +4,9 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Code for generating embeddings, plots and results for our paper: "Canonical Status and Literary Influence: A Comparative Study of Danish
-Novels from the Modern Breakthrough (1870–1900)" presented at NLP4DH at EMNLP 2024.
+Code for generating embeddings, plots and results for our paper: 
+
+"Canonical Status and Literary Influence: A Comparative Study of Danish Novels from the Modern Breakthrough (1870–1900)" presented at NLP4DH at EMNLP 2024.
 
 ## Useful directions 📌
 
@@ -18,6 +19,7 @@ In the main folder:
 ## Data & paper 📝
 
 The dataset used is available at [huggingface](https://huggingface.co/datasets/MiMe-MeMo/Corpus-v1.1)
+
 Please cite our [paper](https://aclanthology.org/2024.nlp4dh-1.14.pdf) if you use the code or the embeddings:
 
 ```
