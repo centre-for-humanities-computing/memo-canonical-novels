@@ -6,7 +6,6 @@ import re
 
 # plotting
 import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
 import seaborn as sns
 
 # analysis
