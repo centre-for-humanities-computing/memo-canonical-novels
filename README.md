@@ -8,7 +8,7 @@
 
 ###
 
-This repository contains code for generating embeddings, plots and results for our paper: 
+This repository contains code for making embeddings, plots and results for our paper: 
 
 "Canonical Status and Literary Influence: A Comparative Study of Danish Novels from the Modern Breakthrough (1870–1900)" presented at NLP4DH at EMNLP 2024.
 
